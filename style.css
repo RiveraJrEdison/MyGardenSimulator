@@ -1,13 +1,402 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #1e261c;
-            color: #f3f4f6;
-        }
-        .code-font { font-family: 'JetBrains Mono', monospace; }
-        .glass-panel {
-            background: rgba(40, 54, 35, 0.45);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(120, 143, 114, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
+/* ---------- Base ---------- */
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+
+    /* Logo-inspired dark background */
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(0, 174, 239, 0.12),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(0, 91, 190, 0.12),
+            transparent 35%
+        ),
+        #05080d;
+
+    color: #e8fbff;
+}
+
+/* ---------- Fonts ---------- */
+
+.code-font {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ---------- Glass Panels ---------- */
+
+.glass-panel {
+    background: rgba(7, 18, 28, 0.72);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(76, 220, 233, 0.22);
+
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.45),
+        0 0 20px rgba(0, 174, 239, 0.04);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.glass-panel:hover {
+    border-color: rgba(76, 220, 233, 0.35);
+
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 24px rgba(0, 174, 239, 0.08);
+}
+
+/* ---------- Selection ---------- */
+
+::selection {
+    background: rgba(76, 220, 233, 0.35);
+    color: #ffffff;
+}
+
+/* ---------- Scrollbar ---------- */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #05080d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        #4cdce9,
+        #0066c4
+    );
+
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        180deg,
+        #70e7f0,
+        #0877d1
+    );
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+button:hover {
+    box-shadow: 0 0 14px rgba(76, 220, 233, 0.12);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* ---------- Select / Dropdown ---------- */
+
+select {
+    color: #dffaff;
+    background-color: #07121c;
+    border-color: rgba(76, 220, 233, 0.35);
+}
+
+select:focus {
+    outline: none;
+
+    border-color: #4cdce9;
+
+    box-shadow:
+        0 0 0 2px rgba(76, 220, 233, 0.12),
+        0 0 14px rgba(76, 220, 233, 0.1);
+}
+
+/* ---------- Code Editor ---------- */
+
+textarea {
+    color: #dffaff;
+    background-color: #02060a !important;
+
+    border-color: rgba(76, 220, 233, 0.25) !important;
+}
+
+textarea:focus {
+    outline: none;
+
+    border-color: #4cdce9 !important;
+
+    box-shadow:
+        0 0 0 2px rgba(76, 220, 233, 0.1),
+        0 0 18px rgba(0, 174, 239, 0.08);
+}
+
+/* ---------- Garden Grid ---------- */
+
+#garden-grid > div {
+    transition:
+        transform 0.15s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#garden-grid > div:hover {
+    transform: scale(1.03);
+
+    border-color: #4cdce9 !important;
+
+    box-shadow:
+        0 0 15px rgba(76, 220, 233, 0.18);
+}
+
+/* ---------- Resource Bars ---------- */
+
+/* Water */
+#water-bar {
+    background: linear-gradient(
+        90deg,
+        #00b7d8,
+        #4cdce9
+    ) !important;
+
+    box-shadow: 0 0 8px rgba(76, 220, 233, 0.3);
+}
+
+/* Seeds */
+#seeds-bar {
+    background: linear-gradient(
+        90deg,
+        #0099d8,
+        #42d6ed
+    ) !important;
+
+    box-shadow: 0 0 8px rgba(0, 174, 239, 0.25);
+}
+
+/* Energy */
+#energy-bar {
+    background: linear-gradient(
+        90deg,
+        #0066c4,
+        #00bfe8
+    ) !important;
+
+    box-shadow: 0 0 8px rgba(0, 174, 239, 0.25);
+}
+
+/* Community Hope */
+#hope-bar {
+    background: linear-gradient(
+        90deg,
+        #0877d1,
+        #4cdce9
+    ) !important;
+
+    box-shadow: 0 0 8px rgba(76, 220, 233, 0.25);
+}
+
+/* ---------- Climate Queue ---------- */
+
+#climate-queue > div {
+    background: rgba(0, 91, 130, 0.16) !important;
+
+    border-color: rgba(76, 220, 233, 0.25) !important;
+
+    box-shadow:
+        inset 0 0 15px rgba(0, 174, 239, 0.03);
+}
+
+/* ---------- Action History ---------- */
+
+#action-stack > div {
+    background: rgba(0, 77, 108, 0.18) !important;
+
+    border-left-color: #4cdce9 !important;
+
+    box-shadow:
+        inset 0 0 12px rgba(76, 220, 233, 0.03);
+}
+
+/* ---------- Toast ---------- */
+
+.fixed.bottom-6.right-6 {
+    background: linear-gradient(
+        135deg,
+        #062c40,
+        #004f8c
+    ) !important;
+
+    border-color: #4cdce9 !important;
+
+    box-shadow:
+        0 0 25px rgba(76, 220, 233, 0.2),
+        0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Version Badge ---------- */
+
+#version-badge {
+    color: #4cdce9 !important;
+
+    background: rgba(0, 174, 239, 0.08) !important;
+
+    border-color: rgba(76, 220, 233, 0.3) !important;
+}
+
+/* ---------- Main Header ---------- */
+
+h1 {
+    text-shadow:
+        0 0 18px rgba(76, 220, 233, 0.12);
+}
+
+/* ---------- Tab Navigation ---------- */
+
+#tab-game,
+#tab-code {
+    transition: all 0.2s ease;
+}
+
+#tab-game.bg-\[\#283623\],
+#tab-code.bg-\[\#283623\] {
+    background: linear-gradient(
+        135deg,
+        rgba(0, 112, 164, 0.5),
+        rgba(0, 61, 120, 0.65)
+    ) !important;
+
+    color: #e8fbff !important;
+
+    box-shadow:
+        0 0 14px rgba(76, 220, 233, 0.08);
+}
+
+/* ---------- General Cyan Text Overrides ---------- */
+
+.text-emerald-100 {
+    color: #e8fbff !important;
+}
+
+.text-emerald-200 {
+    color: #b9f4fa !important;
+}
+
+.text-emerald-300 {
+    color: #83e8f1 !important;
+}
+
+.text-emerald-400 {
+    color: #4cdce9 !important;
+}
+
+.text-emerald-400\/80 {
+    color: rgba(76, 220, 233, 0.8) !important;
+}
+
+.text-emerald-300\/80 {
+    color: rgba(131, 232, 241, 0.8) !important;
+}
+
+/* ---------- Blue Text ---------- */
+
+.text-blue-300 {
+    color: #65dff0 !important;
+}
+
+/* ---------- Yellow / Amber → Cyan/Blue ---------- */
+
+.text-amber-300,
+.text-amber-400,
+.text-yellow-200 {
+    color: #55dff0 !important;
+}
+
+/* ---------- Rose → Blue ---------- */
+
+.text-rose-300 {
+    color: #55c9ef !important;
+}
+
+/* ---------- Borders ---------- */
+
+.border-emerald-800 {
+    border-color: rgba(0, 174, 239, 0.35) !important;
+}
+
+.border-emerald-800\/40 {
+    border-color: rgba(0, 174, 239, 0.22) !important;
+}
+
+.border-emerald-800\/60 {
+    border-color: rgba(0, 174, 239, 0.3) !important;
+}
+
+.border-emerald-700 {
+    border-color: rgba(76, 220, 233, 0.4) !important;
+}
+
+/* ---------- Dark Backgrounds ---------- */
+
+.bg-\[\#192218\] {
+    background-color: #07121c !important;
+}
+
+.bg-\[\#1b2219\] {
+    background-color: #07121c !important;
+}
+
+.bg-\[\#283623\] {
+    background: linear-gradient(
+        135deg,
+        #07384c,
+        #06315a
+    ) !important;
+}
+
+.bg-\[\#2a3825\] {
+    background-color: #0a202c !important;
+}
+
+.bg-\[\#34462e\] {
+    background-color: #0c3040 !important;
+}
+
+.bg-\[\#0a0f0a\] {
+    background-color: #02060a !important;
+}
+
+/* ---------- Special Blue/Cyan Glow ---------- */
+
+#garden-grid {
+    filter: drop-shadow(
+        0 0 8px rgba(76, 220, 233, 0.025)
+    );
+}
+
+/* ---------- Responsive Polish ---------- */
+
+@media (max-width: 768px) {
+    .glass-panel {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    #garden-grid {
+        gap: 0.5rem;
+    }
+}
