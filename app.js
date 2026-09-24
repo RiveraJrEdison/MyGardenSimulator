@@ -6,7 +6,7 @@
         // PATCH: bug fix or small tweak with no new feature
         // Use 0.x.y while in development; move to 1.0.0 once all 11 topics are complete.
         // =====================================================================
-        const APP_VERSION = "0.3.0";
+        const APP_VERSION = "0.1.0";
 
         let pyodideInstance = null;
         let gardenPlants = {};
