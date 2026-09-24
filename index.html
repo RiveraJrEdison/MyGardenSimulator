@@ -1,17 +1,11 @@
 <!--
 # Changelog
 
-## [0.1.0] - 2026-09-21
-### Added
-- Changed the color theme to a more vibrant cyan/blue palette, inspired by my logo design.
-
 ## [0.2.0] - 2026-09-21
 ### Added
-- Topic 1 (Action History Stack) and Topic 2 (Climate Queue) Python code
-### Changed
-- Student Code Editor is read-only; code is edited only in index.html
-### Removed
-- localStorage saving, so the editor always shows the code that is in index.html
+- New "Undo" button to pop the last action from the stack and revert its effects.
+- Code Editor is not locked anymore; students can now edit and run Python code for all 11 topics.
+- Changed the color theme to blue-cyan for a more vibrant and modern look.
 
 ## [0.1.0] - 2026-09-21
 ### Removed
@@ -131,7 +125,7 @@
                     <i data-lucide="code" class="w-5 h-5 text-emerald-400"></i> Student Code Editor (Lab)
                 </h2>
                 <select id="topic-selector" onchange="loadTopic()" class="w-full bg-[#1b2219] border border-emerald-700 rounded-xl p-3 mb-4 text-sm"></select>
-                <textarea id="code-editor" readonly class="flex-1 bg-[#0a0f0a] border border-emerald-800 rounded-xl p-4 code-font text-sm font-medium leading-relaxed" spellcheck="false"></textarea>
+                <textarea id="code-editor" class="flex-1 bg-[#0a0f0a] border border-emerald-800 rounded-xl p-4 code-font text-sm font-medium leading-relaxed" spellcheck="false"></textarea>
                 <button onclick="runPythonCode()" class="mt-4 bg-emerald-600 hover:bg-emerald-500 py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2">
                     <i data-lucide="play" class="w-4 h-4"></i> Run Python Code
                 </button>

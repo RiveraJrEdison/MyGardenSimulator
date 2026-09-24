@@ -6,7 +6,7 @@
         // PATCH: bug fix or small tweak with no new feature
         // Use 0.x.y while in development; move to 1.0.0 once all 11 topics are complete.
         // =====================================================================
-        const APP_VERSION = "0.1.0";
+        const APP_VERSION = "0.2.0";
 
         let pyodideInstance = null;
         let gardenPlants = {};
@@ -105,6 +105,8 @@
                 pyodideInstance.globals.set("updateResources", updateResources);
                 pyodideInstance.globals.set("addPlantsToDropdown", addPlantsToDropdown);
                 pyodideInstance.globals.set("pushAction", pushAction);
+                pyodideInstance.globals.set("popAction", popAction);
+                pyodideInstance.globals.set("notify", notify);
                 pyodideInstance.globals.set("updateClimateQueue", updateClimateQueue);
                 await pyodideInstance.runPythonAsync(`
                     import sys
@@ -157,12 +159,57 @@
 
         function renderGarden() {
             const grid = document.getElementById("garden-grid");
+
+            if (!grid) return;
+
             grid.innerHTML = "";
+
             for (let i = 0; i < 25; i++) {
+
                 const cell = document.createElement("div");
-                cell.className = "aspect-square bg-[#2a3825] rounded-xl flex items-center justify-center text-3xl border border-emerald-800";
+
+                cell.className =
+                    "aspect-square bg-[#2a3825] rounded-xl flex items-center justify-center text-3xl border border-emerald-800 cursor-pointer select-none";
+
+                // Display plant or empty soil
                 cell.textContent = gardenPlants[i] ? "🌱" : "⬜";
+
+                // Make the tile clickable
+                cell.onclick = () => plantFromUI(i);
+
+                // Optional accessibility
+                cell.title = gardenPlants[i]
+                    ? `Occupied by ${gardenPlants[i]}`
+                    : `Plant at plot ${i + 1}`;
+
                 grid.appendChild(cell);
+            }
+        }
+
+        async function plantFromUI(position) {
+
+            if (!pyodideInstance) {
+                showToast("Python is still loading.");
+                return;
+            }
+
+            try {
+
+                await pyodideInstance.runPythonAsync(
+                    `plant_from_ui(${position})`
+                );
+
+            } catch (err) {
+
+                console.error(err);
+
+                const consoleEl =
+                    document.getElementById("output-console");
+
+                consoleEl.innerHTML +=
+                    `<span class="text-red-400">
+                    Planting error: ${err.message}
+                    </span><br>`;
             }
         }
 
@@ -228,14 +275,36 @@
             });
         }
 
-        // UI-only: removes the last displayed label. Your Python owns the real stack.
-        function triggerUndo() {
+        // popAction(): removes the top displayed entry without adding a new one.
+        // Called by Python's undo_last_action() after it actually reverses game state —
+        // this is what makes the Undo button a real undo instead of a display-only pop.
+        function popAction() {
             if (displayActionHistory.length > 0) {
-                const undone = displayActionHistory.pop();
+                displayActionHistory.pop();
                 renderActionStack();
-                showToast(`Undid: ${undone}`);
-            } else {
-                showToast("Stack is empty.");
+            }
+        }
+
+        // notify(msg): lets Python trigger a toast without owning any DOM logic itself.
+        function notify(msg) {
+            showToast(msg);
+        }
+
+        // Undo button handler. Delegates to Python — action_stack (and what it takes
+        // to reverse an action) lives entirely on the Python side.
+        async function triggerUndo() {
+            if (!pyodideInstance) {
+                showToast("Python is still loading.");
+                return;
+            }
+            try {
+                await pyodideInstance.runPythonAsync("undo_last_action()");
+            } catch (err) {
+                console.error(err);
+                const consoleEl = document.getElementById("output-console");
+                if (consoleEl) {
+                    consoleEl.innerHTML += `<span class="text-red-400">Undo error: ${err.message}</span><br>`;
+                }
             }
         }
 
@@ -261,7 +330,15 @@
 
         function loadTopic() {
             const key = document.getElementById("topic-selector").value;
-            document.getElementById("code-editor").value = topicTemplates[key].code;
+            const editor = document.getElementById("code-editor");
+
+            const savedCode = localStorage.getItem(`garden-topic-${key}`);
+
+            if (savedCode !== null) {
+                editor.value = savedCode;
+            } else {
+                editor.value = topicTemplates[key].code;
+            }
         }
 
         function switchTab(tab) {
@@ -273,23 +350,36 @@
             document.getElementById("tab-code").classList.toggle("text-emerald-100", tab === "code");
         }
 
-        window.onload = () => {
+        function saveCurrentCode() {
+            const key = document.getElementById("topic-selector").value;
+            const editor = document.getElementById("code-editor");
+
+            localStorage.setItem(`garden-topic-${key}`, editor.value);
+        }
+
+       window.onload = () => {
             document.getElementById("version-badge").textContent = "v" + APP_VERSION;
             lucide.createIcons();
             renderGarden();
             renderActionStack();
-            // Resources stay at 0 until your Python calls updateResources(...)
+
             updateResources(0, 0, 0, 0, 0);
 
             const select = document.getElementById("topic-selector");
+
             Object.keys(topicTemplates).forEach(k => {
                 const opt = document.createElement("option");
                 opt.value = k;
                 opt.textContent = topicTemplates[k].title;
                 select.appendChild(opt);
             });
+
+            const editor = document.getElementById("code-editor");
+
+            editor.addEventListener("input", saveCurrentCode);
+
             loadTopic();
             switchTab("game");
-            // Pre-load Pyodide in the background so the first Run is faster
+
             initPyodide().catch(() => {});
         };
