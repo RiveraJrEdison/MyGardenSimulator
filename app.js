@@ -6,7 +6,7 @@
         // PATCH: bug fix or small tweak with no new feature
         // Use 0.x.y while in development; move to 1.0.0 once all 11 topics are complete.
         // =====================================================================
-        const APP_VERSION = "0.2.0";
+        const APP_VERSION = "0.1.0";
 
         let pyodideInstance = null;
         let gardenPlants = {};
@@ -171,8 +171,8 @@
                 cell.className =
                     "aspect-square bg-[#2a3825] rounded-xl flex items-center justify-center text-3xl border border-emerald-800 cursor-pointer select-none";
 
-                // Display plant or empty soil
-                cell.textContent = gardenPlants[i] ? "🌱" : "⬜";
+                // Display whatever stage glyph Python sent (seed/sprout/mature), or empty soil
+                cell.textContent = gardenPlants[i] || "⬜";
 
                 // Make the tile clickable
                 cell.onclick = () => plantFromUI(i);
